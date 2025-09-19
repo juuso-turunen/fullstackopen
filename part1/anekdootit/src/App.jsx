@@ -14,9 +14,21 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
 
+  const onClick = () => {
+    function getRandomInt(min, max) {
+      const minCeiled = Math.ceil(min);
+      const maxFloored = Math.floor(max);
+      return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+    }
+    
+    setSelected(getRandomInt(0, anecdotes.length))
+  }
+
   return (
     <div>
       {anecdotes[selected]}
+      <br />
+      <button onClick={onClick}>next anectode</button>
     </div>
   )
 }
