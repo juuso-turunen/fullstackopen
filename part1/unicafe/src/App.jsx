@@ -38,6 +38,14 @@ const Button = ({text, onClick}) => {
 
 const Statistics = ({statistics}) => {
   const sum = Object.values(statistics).reduce((accumulator, currentValue) => accumulator + currentValue)
+  if ( sum === 0 ) {
+    return (
+      <div>
+        <h2>statistics</h2>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
   
   return (
     <div className="statistics">
