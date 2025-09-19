@@ -46,17 +46,23 @@ const Statistics = ({statistics}) => {
       </div>
     )
   }
-  
+
   return (
     <div className="statistics">
       <h2>statistics</h2>
-      <p>good {statistics.good}</p>
-      <p>neutral {statistics.neutral}</p>
-      <p>bad {statistics.bad}</p>
-      <p>all {sum}</p>
-      <p>average {(statistics.good - statistics.bad) / sum}</p>
-      <p>positive {statistics.good / sum * 100} %</p>
+      <StatisticLine text="good" value={statistics.good} />
+      <StatisticLine text="neutral" value={statistics.neutral} />
+      <StatisticLine text="bad" value={statistics.bad} />
+      <StatisticLine text="all" value={sum} />
+      <StatisticLine text="average" value={(statistics.good - statistics.bad) / sum} />
+      <StatisticLine text="positive" value={statistics.good / sum * 100} unit="%" />
     </div>
+  )
+}
+
+const StatisticLine = ({text, value, unit=""}) => {
+  return (
+    <p>{text} {value}{unit && ' ' + unit}</p>
   )
 }
 
