@@ -37,12 +37,17 @@ const Button = ({text, onClick}) => {
 }
 
 const Statistics = ({statistics}) => {
+  const sum = Object.values(statistics).reduce((accumulator, currentValue) => accumulator + currentValue)
+  
   return (
     <div className="statistics">
       <h2>statistics</h2>
       <p>good {statistics.good}</p>
       <p>neutral {statistics.neutral}</p>
       <p>bad {statistics.bad}</p>
+      <p>all {sum}</p>
+      <p>average {(statistics.good - statistics.bad) / sum}</p>
+      <p>positive {statistics.good / sum * 100} %</p>
     </div>
   )
 }
