@@ -32,14 +32,24 @@ const App = () => {
     setVote(v)
   }
 
+  const indexOfMostVotes = votes.reduce((indexOfGreatest, currentValue, index) => {
+    if (currentValue > votes[indexOfGreatest])
+      return index
+    return indexOfGreatest
+  }, 0)
+
   return (
     <div>
-      {anecdotes[selected]}
-      <br />
-      has {votes[selected]} votes
-      <br />
+      <h2>Anectode of the day</h2>
+      <p>{anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
+
       <button onClick={onNextAnectode}>next anectode</button>
       <button onClick={onVote}>vote</button>
+
+      <h2>Anectode with most votes</h2>
+      <p>{anecdotes[indexOfMostVotes]}</p>
+      <p>has {votes[indexOfMostVotes]} votes</p>
     </div>
   )
 }
