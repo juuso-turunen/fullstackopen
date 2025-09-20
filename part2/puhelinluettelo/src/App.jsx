@@ -9,14 +9,19 @@ const App = () => {
   const handleNameChange = (e) => {
     setNewName(e.target.value)
   }
-
+  
   const addNewName = (e) => {
     e.preventDefault()
+    
+    const isNewPerson = !persons.some((person) => person.name === newName)
 
-    const newPersons = [...persons, {name: newName}]
-    setPersons(newPersons)
-
-    setNewName('')
+    if (isNewPerson) {
+      const newPersons = [...persons, {name: newName}]
+      setPersons(newPersons)
+      setNewName('')
+    } else {
+      alert(`${newName} is already added to phonebook`)
+    }
   }
 
   return (
