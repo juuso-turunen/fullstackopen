@@ -27,7 +27,7 @@ const App = () => {
     
     if (isNewPerson) {
       const newPerson = {name: newName, number: newNumber}
-      
+
       personService.create(newPerson).then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
       })
@@ -37,6 +37,15 @@ const App = () => {
     } else {
       alert(`${newName} is already added to phonebook`)
     }
+  }
+
+  const deletePerson = (id) => {
+    const confirmDelete = window.confirm(`Delete ${persons.find(person => person.id === id).name}`)
+    if (! confirmDelete) return;
+
+    personService.remove(id).then(() => {
+      setPersons(persons.filter(person => person.id !== id))
+    })
   }
 
   const filteredPersons = persons.filter((person) =>
@@ -58,7 +67,7 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons persons={filteredPersons}/>
+      <Persons persons={filteredPersons} deleteFunction={deletePerson}/>
     </div>
   )
 
