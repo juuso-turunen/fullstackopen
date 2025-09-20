@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Persons from './components/Persons'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -24,9 +27,10 @@ const App = () => {
     e.preventDefault()
     
     const isNewPerson = !persons.some((person) => person.name === newName)
-
+    
     if (isNewPerson) {
       const newPersons = [...persons, {name: newName, number: newNumber}]
+      setFilteredPersons(newPersons)
       setPersons(newPersons)
       setNewName('')
       setNewNumber('')
@@ -38,26 +42,20 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with <input value={searchQuery} onChange={filterPersons} />
-      </div>
+      <Filter searchQuery={searchQuery} filterFunction={filterPersons} />
 
-      <h2>add a new</h2>
-      <form>
-        <div>
-          name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
-          number: <input type="tel" value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
-        </div>
-        <div>
-          <button onClick={addNewPerson} type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <ul>
-        {filteredPersons.map((person) =>
-          <li key={person.name}>{person.name}: {person.number}</li>
-        )}
-      </ul>
+      <h3>add a new</h3>
+      <PersonForm
+        newName={newName}
+        setNewName={setNewName}
+        newNumber={newNumber}
+        setNewNumber={setNewNumber}
+        submitFunction={addNewPerson}
+      />
+
+      <h3>Numbers</h3>
+      {console.log(filteredPersons)}
+      <Persons persons={filteredPersons}/>
     </div>
   )
 
