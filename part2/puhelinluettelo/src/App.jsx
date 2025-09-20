@@ -5,29 +5,19 @@ import PersonForm from './components/PersonForm'
 import axios from 'axios'
 
 const App = () => {
-  const [persons, setPersons] = useState([])
-
+  const [persons, setPersons] = useState([])  
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  
   useEffect(() => {
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
-        setFilteredPersons(response.data)
         setPersons(response.data)
       }
     )
   }, [])
-
-  const [filteredPersons, setFilteredPersons] = useState(persons)
-
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-
-  const filterPersons = (e) => {
-    const newSearchQuery = e.target.value
-    setSearchQuery(newSearchQuery)
-    setFilteredPersons(persons.filter((person) => person.name.toLocaleLowerCase().includes(newSearchQuery.toLocaleLowerCase())))
-  }
   
   const addNewPerson = (e) => {
     e.preventDefault()
@@ -36,7 +26,6 @@ const App = () => {
     
     if (isNewPerson) {
       const newPersons = [...persons, {name: newName, number: newNumber}]
-      setFilteredPersons(newPersons)
       setPersons(newPersons)
       setNewName('')
       setNewNumber('')
@@ -45,10 +34,14 @@ const App = () => {
     }
   }
 
+  const filteredPersons = persons.filter((person) =>
+    person.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter searchQuery={searchQuery} filterFunction={filterPersons} />
+      <Filter searchQuery={searchQuery} filterFunction={(e) => setSearchQuery(e.target.value)} />
 
       <h3>add a new</h3>
       <PersonForm
