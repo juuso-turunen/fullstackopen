@@ -9,7 +9,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
-  
+
   useEffect(() => {
     axios
       .get('http://localhost:3001/persons')
@@ -25,8 +25,12 @@ const App = () => {
     const isNewPerson = !persons.some((person) => person.name === newName)
     
     if (isNewPerson) {
-      const newPersons = [...persons, {name: newName, number: newNumber}]
-      setPersons(newPersons)
+      const newPerson = {name: newName, number: newNumber}
+      axios.post('http://localhost:3001/persons', newPerson).then(response => {
+        setPersons(persons.concat(response.data))
+      })
+      // const newPersons = [...persons, newPerson]
+      // setPersons(newPersons)
       setNewName('')
       setNewNumber('')
     } else {
