@@ -5,7 +5,7 @@ const Notification = ({notification}) => {
 
     if (!(type && message && setter)) return
 
-    setTimeout(() => setter({... notification, message: null}), 2000)
+    setTimeout(() => setter({... notification, message: null}), 3000)
 
     return (
         <div className={`notification${type ? ` ${type}` : ''}`}>

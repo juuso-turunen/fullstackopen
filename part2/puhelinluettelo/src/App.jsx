@@ -16,7 +16,7 @@ const App = () => {
   
   useEffect(() => {
     setNotification({...notification, setter: setNotification})
-    
+
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
@@ -66,7 +66,7 @@ const App = () => {
     personService.remove(id).then(() => {
       setPersons(persons.filter(person => person.id !== id))
       setNotification({...notification, type: 'success', message: `Deleted ${personName}`})
-    })
+    }).catch(error => setNotification({...notification, type: 'error', message: `Information of ${personName} has already been removed from server`}))
   }
 
   const filteredPersons = persons.filter((person) =>

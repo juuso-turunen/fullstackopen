@@ -12,5 +12,6 @@
     &.error {
         border-color: red;
         background-color: brown;
+        color: white;
     }
 }
