@@ -1,4 +1,9 @@
+import { useState } from "react"
+import CountryDetails from "./CountryDetails"
+
 const CountryList = ({countries}) => {
+    const [countryToShow, setCountryToShow] = useState(null)
+
     if (countries.length > 10) return (
         <p>Too many mathces, specify another filter</p>
     )
@@ -6,28 +11,22 @@ const CountryList = ({countries}) => {
     if (countries.length === 1) {
         const country = countries[0]
         return (
-            <div>
-                <h2>{country.name.common}</h2>
-                <p>capital {country.capital}</p>
-                <p>area {country.area}</p>
-
-                <h3>Languages</h3>
-                <ul>
-                  {Object.values(country.languages).map(language =>
-                    <li key={language}>{language}</li>
-                  )}
-                </ul>
-                <img width={200} src={country.flags.svg} alt="" />
-            </div>
+            <CountryDetails country={country} />
         )
     }
-
+    
     return (
-    <ul>
-      {countries.map(country => 
-        <li key={country.name.official}>{country.name.common}</li>
-      )}
-    </ul>
+        <div>
+            <ul>
+            {countries.map(country => 
+                <li key={country.name.official}>
+                    {country.name.common}
+                    <button onClick={() => setCountryToShow(country)}>Show</button>
+                </li>
+            )}
+            </ul>
+            <CountryDetails country={countryToShow} />
+        </div>
     )
 }
 
