@@ -32,17 +32,27 @@ app.get("/api/persons", (request, response) => {
 
 app.post("/api/persons", (request, response) => {
     const newId = Math.floor(Math.random() * 1000);
-    const body = request.body;
+    const { name, number } = request.body;
+
+    if (!name || !number)
+        return response.status(400).json({
+            error: "required parameter is missing",
+        });
+
+    if (persons.find((person) => person.name === name))
+        return response.status(400).json({
+            error: "name must be unique",
+        });
 
     const newPerson = {
         id: String(newId),
-        name: body.name,
-        number: body.number,
+        name: name,
+        number: number,
     };
 
     persons = persons.concat(newPerson);
 
-    response.json(newPerson);
+    return response.json(newPerson);
 });
 
 app.get("/api/persons/:id", (request, response) => {
