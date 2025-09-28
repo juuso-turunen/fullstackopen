@@ -15,4 +15,8 @@ const update = (id, newObject) => {
         .then((response) => response.data);
 };
 
-export default { create, remove, update };
+const getAll = () => {
+    return axios.get(baseUrl).then((response) => response.data);
+};
+
+export default { create, remove, update, getAll };
