@@ -18,9 +18,19 @@ DELETE http://localhost:3001/api/persons/68db90b443b235cdbbb0c218
 ###
 # Update a person
 PUT http://localhost:3001/api/persons/68db850180fe4dbd8fbde05c
-content-type: application/json
+Content-Type: application/json
 
 {
     "name": "Juu",
+    "number": "050-434340"
+}
+
+###
+# Add a person, with validation error
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "name": "Ju",
     "number": "050-434340"
 }

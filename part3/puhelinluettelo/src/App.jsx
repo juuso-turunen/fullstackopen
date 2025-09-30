@@ -33,12 +33,14 @@ const App = () => {
 
       personService.create(newPerson).then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
-      })
 
-      setNotification({...notification, type: 'success', message: `Added ${newName}`})
-      
-      setNewName('')
-      setNewNumber('')
+        setNotification({...notification, type: 'success', message: `Added ${newName}`})
+        
+        setNewName('')
+        setNewNumber('')
+      }).catch(error => {  
+        setNotification({...notification, type: 'error', message: `${error.response.data.error}`})
+      })
     } else {
       const confirmUpdate = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
       

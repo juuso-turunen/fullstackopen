@@ -29,11 +29,6 @@ app.get("/api/persons", (request, response, next) => {
 app.post("/api/persons", (request, response, next) => {
     const { name, number } = request.body;
 
-    if (!name || !number)
-        return response.status(400).json({
-            error: "required parameter is missing",
-        });
-
     const person = new Person({
         name: name,
         number: number,
@@ -111,6 +106,10 @@ const errorHandler = (error, request, response, next) => {
         return response.status(400).send({ error: "malformatted id" });
 
     if (error.name === "UnknownEndpoint") return response.status(404).end();
+
+    if (error.name === "ValidationError") {
+        return response.status(400).json({ error: error.message });
+    }
 
     next(error);
 };
