@@ -48,7 +48,6 @@ app.get("/api/persons", (request, response) => {
 });
 
 app.post("/api/persons", (request, response) => {
-    const newId = Math.floor(Math.random() * 1000);
     const { name, number } = request.body;
 
     if (!name || !number)
@@ -56,20 +55,14 @@ app.post("/api/persons", (request, response) => {
             error: "required parameter is missing",
         });
 
-    if (persons.find((person) => person.name === name))
-        return response.status(400).json({
-            error: "name must be unique",
-        });
-
-    const newPerson = {
-        id: String(newId),
+    const person = new Person({
         name: name,
         number: number,
-    };
+    });
 
-    persons = persons.concat(newPerson);
-
-    return response.json(newPerson);
+    person.save().then((result) => {
+        return response.json(result);
+    });
 });
 
 app.get("/api/persons/:id", (request, response) => {
