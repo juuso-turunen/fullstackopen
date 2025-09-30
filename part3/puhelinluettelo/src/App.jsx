@@ -53,7 +53,9 @@ const App = () => {
           
           setNewName('')
           setNewNumber('')
-        })
+        }).catch(error => {  
+        setNotification({...notification, type: 'error', message: `${error.response.data.error}`})
+      })
       }
     }
   }
