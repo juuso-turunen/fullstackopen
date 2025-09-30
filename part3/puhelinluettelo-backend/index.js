@@ -18,29 +18,6 @@ app.use(
     )
 );
 
-let persons = [
-    {
-        id: "1",
-        name: "Arto Hellas",
-        number: "040-123456",
-    },
-    {
-        id: "2",
-        name: "Ada Lovelace",
-        number: "39-44-5323523",
-    },
-    {
-        id: "3",
-        name: "Dan Abramov",
-        number: "12-43-234345",
-    },
-    {
-        id: "4",
-        name: "Mary Poppendieck",
-        number: "39-23-6423122",
-    },
-];
-
 app.get("/api/persons", (request, response, next) => {
     Person.find({})
         .then((result) => {
@@ -90,16 +67,16 @@ app.put("/api/persons/:id", (request, response, next) => {
     });
 });
 
-app.get("/api/persons/:id", (request, response) => {
+app.get("/api/persons/:id", (request, response, next) => {
     const id = request.params.id;
 
-    const person = persons.find((person) => person.id === id);
+    Person.findById(id)
+        .then((person) => {
+            if (person) return response.json(person);
 
-    if (person) {
-        return response.json(person);
-    }
-
-    return response.status(404).end();
+            response.status(404).end();
+        })
+        .catch((error) => next(error));
 });
 
 app.delete("/api/persons/:id", (request, response, next) => {
@@ -113,11 +90,12 @@ app.delete("/api/persons/:id", (request, response, next) => {
 });
 
 app.get("/info", (request, response) => {
-    response.send(`
-        <p>Phonebook has info for ${persons.length} people</p>
-        <p>${new Date()}</p>
-        
-        `);
+    const persons = Person.find({}).then((persons) => {
+        response.send(`
+            <p>Phonebook has info for ${persons.length} people</p>
+            <p>${new Date()}</p>
+            `);
+    });
 });
 
 const unknownEndpoint = (request, response, next) => {
