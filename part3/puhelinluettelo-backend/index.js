@@ -41,13 +41,15 @@ let persons = [
     },
 ];
 
-app.get("/api/persons", (request, response) => {
-    Person.find({}).then((result) => {
-        response.json(result);
-    });
+app.get("/api/persons", (request, response, next) => {
+    Person.find({})
+        .then((result) => {
+            response.json(result);
+        })
+        .catch((error) => next(error));
 });
 
-app.post("/api/persons", (request, response) => {
+app.post("/api/persons", (request, response, next) => {
     const { name, number } = request.body;
 
     if (!name || !number)
@@ -60,9 +62,12 @@ app.post("/api/persons", (request, response) => {
         number: number,
     });
 
-    person.save().then((result) => {
-        return response.json(result);
-    });
+    person
+        .save()
+        .then((result) => {
+            return response.json(result);
+        })
+        .catch((error) => next(error));
 });
 
 app.get("/api/persons/:id", (request, response) => {
@@ -77,14 +82,13 @@ app.get("/api/persons/:id", (request, response) => {
     return response.status(404).end();
 });
 
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
     const id = request.params.id;
 
     Person.findByIdAndDelete(id)
         .then((result) => response.status(204).end())
         .catch((error) => {
-            console.log(error);
-            response.status(400).send({ error: "malformatted id" });
+            next(error);
         });
 });
 
@@ -96,11 +100,24 @@ app.get("/info", (request, response) => {
         `);
 });
 
-const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: "unknown endpoint" });
+const unknownEndpoint = (request, response, next) => {
+    next({ name: "UnknownEndpoint" });
 };
 
 app.use(unknownEndpoint);
+
+const errorHandler = (error, request, response, next) => {
+    console.log(error.message);
+
+    if (error.name === "CastError")
+        return response.status(400).send({ error: "malformatted id" });
+
+    if (error.name === "UnknownEndpoint") return response.status(404).end();
+
+    next(error);
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
