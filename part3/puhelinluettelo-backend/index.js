@@ -70,6 +70,26 @@ app.post("/api/persons", (request, response, next) => {
         .catch((error) => next(error));
 });
 
+app.put("/api/persons/:id", (request, response, next) => {
+    const id = request.params.id;
+
+    const { name, number } = request.body;
+
+    Person.findById(id).then((person) => {
+        if (!person) return response.status(404).end();
+
+        person.name = name;
+        person.number = number;
+
+        person
+            .save()
+            .then((result) => {
+                return response.json(result);
+            })
+            .catch((error) => next(error));
+    });
+});
+
 app.get("/api/persons/:id", (request, response) => {
     const id = request.params.id;
 
