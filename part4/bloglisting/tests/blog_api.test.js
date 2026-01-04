@@ -20,6 +20,14 @@ test('all blogs are returned', async () => {
   assert.strictEqual(response.body.length, helper.initialBlogs.length)
 })
 
+test('all blogs have id field', async () => {
+  const response = await api.get('/api/blogs')
+
+  const blogsWithoudId = response.body.filter(blog => !Object.prototype.hasOwnProperty.call(blog, 'id'))
+
+  assert.strictEqual(blogsWithoudId.length, 0)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
