@@ -95,7 +95,7 @@ test('return bad request (400) if the title is missing', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('delete blog', async () => {
+test('delete a blog', async () => {
   const blogsAtStart = await helper.blogsInDb()
 
   const idOfBlog = blogsAtStart[0].id
@@ -109,6 +109,22 @@ test('delete blog', async () => {
   assert.strictEqual(blogsAtStart.length - 1, blogsAtEnd.length)
 
   assert.strictEqual(blogsAtEnd.some(blog => blog.id === idOfBlog), false)
+})
+
+test('edit a blog', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+
+  const idOfBlog = blogsAtStart[0].id
+
+  const response = await api
+    .put(`/api/blogs/${idOfBlog}`)
+    .send({
+      'likes': 999999
+    })
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  assert.strictEqual(response.body.likes, 999999)
 })
 
 after(async () => {
