@@ -95,6 +95,22 @@ test('return bad request (400) if the title is missing', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
+test('delete blog', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+
+  const idOfBlog = blogsAtStart[0].id
+
+  await api
+    .delete(`/api/blogs/${idOfBlog}`)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  assert.strictEqual(blogsAtStart.length - 1, blogsAtEnd.length)
+
+  assert.strictEqual(blogsAtEnd.some(blog => blog.id === idOfBlog), false)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
