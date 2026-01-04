@@ -28,6 +28,25 @@ test('all blogs have id field', async () => {
   assert.strictEqual(blogsWithoudId.length, 0)
 })
 
+test('blog can be added', async () => {
+  const newBlog = {
+    title: 'Yhdysvallat tiesi kaiken jopa Maduron ruokavaliosta ja lemmikeistä – näin hämmästyttävä sieppaus­operaatio toteutettiin',
+    url: 'https://yle.fi/a/74-20202504',
+    likes: 40,
+    author: 'Sakari Nuuttila'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
