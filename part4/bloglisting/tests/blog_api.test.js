@@ -69,6 +69,32 @@ test('the default value to likes is 0', async () => {
   assert.strictEqual(addedBlog.likes, 0)
 })
 
+test('return bad request (400) if the url is missing', async () => {
+  const newBlog = {
+    title: 'Yhdysvallat tiesi kaiken jopa Maduron ruokavaliosta ja lemmikeistä – näin hämmästyttävä sieppaus­operaatio toteutettiin',
+    author: 'Sakari Nuuttila'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+})
+
+test('return bad request (400) if the title is missing', async () => {
+  const newBlog = {
+    url: 'https://yle.fi/a/74-20202504',
+    author: 'Sakari Nuuttila'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
