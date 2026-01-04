@@ -47,6 +47,28 @@ test('blog can be added', async () => {
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
 })
 
+test('the default value to likes is 0', async () => {
+  const newBlog = {
+    title: 'Yhdysvallat tiesi kaiken jopa Maduron ruokavaliosta ja lemmikeistä – näin hämmästyttävä sieppaus­operaatio toteutettiin',
+    url: 'https://yle.fi/a/74-20202504',
+    author: 'Sakari Nuuttila'
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const idOfAddedBlog = response.body.id
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  const addedBlog = blogsAtEnd.find(blog => blog.id === idOfAddedBlog)
+
+  assert.strictEqual(addedBlog.likes, 0)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
