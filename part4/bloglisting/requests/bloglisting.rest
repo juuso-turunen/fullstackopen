@@ -12,14 +12,3 @@ Content-Type: application/json
     "url": "https://yle.fi/a/74-20186043",
     "likes": "2"
 }
-
-###
-# Create a user
-POST http://localhost:3003/api/users
-Content-Type: application/json
-
-{
-    "username": "juuso",
-    "password": "juusonsalasana",
-    "name": "Juuso T"
-}
