@@ -8,7 +8,11 @@ usersRouter.get('/', async (request, response) => {
 })
 
 usersRouter.post('/', async (request, response) => {
-  const { username, name, password } = request.body
+  const { username = '', name, password = '' } = request.body
+
+  if (username.length < 3 || password.length < 3) {
+    return response.status(400).json({ 'error': 'username and password is required and have to be at least 3 characters long' })
+  }
 
   const saltRounds = 13
   const passwordHash = await bcrypt.hash(password, saltRounds)
