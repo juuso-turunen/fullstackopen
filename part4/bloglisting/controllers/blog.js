@@ -1,5 +1,4 @@
 const blogRouter = require('express').Router()
-const blog = require('../models/blog')
 const Blog = require('../models/blog')
 
 blogRouter.get('/', async (request, response) => {
@@ -10,15 +9,8 @@ blogRouter.get('/', async (request, response) => {
 blogRouter.post('/', async (request, response, next) => {
   const blog = new Blog(request.body)
 
-  try {
-    const result = await blog.save()
-    response.status(201).json(result)
-  } catch (error) {
-    if (error.name === 'ValidationError') {
-      response.status(400).json()
-    }
-    next(error)
-  }
+  const result = await blog.save()
+  response.status(201).json(result)
 })
 
 blogRouter.delete('/:id', async (request, response) => {
