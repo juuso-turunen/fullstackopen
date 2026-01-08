@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken')
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
@@ -20,6 +22,10 @@ const tokenExtractor = (request, response, next) => {
   const authorization = request.get('authorization')
   request.token = authorization?.startsWith('Bearer ')
     ? authorization.replace('Bearer ', '')
+    : null
+
+  request.decodedToken = request.token
+    ? jwt.verify(request.token, process.env.JWT_SECRET)
     : null
 
   next()

@@ -8,7 +8,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1dXNvIiwiaWQiOiI2OTVlNWU3YTc1OWY4MzA1ODgzYWQ3MmYiLCJpYXQiOjE3Njc3OTI0MzV9.Tr3qAhX6PGX6Uve0JGup9MI-C00FzFdo1b0amIdsSZE
 
 {
-    "title": "Auto syttyi tuleen maan alla Tampereella – myös useita muita autoja tuhoutui rajussa parkkihalli­palossa",
+    "title": "0Auto syttyi tuleen maan alla Tampereella – myös useita muita autoja tuhoutui rajussa parkkihalli­palossa",
     "author": "Kirsi Matson-Mäkelä, Antti Palomaa",
     "url": "https://yle.fi/a/74-20186043",
     "likes": "2"
