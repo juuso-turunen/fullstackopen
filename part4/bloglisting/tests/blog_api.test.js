@@ -10,10 +10,46 @@ const assert = require('node:assert')
 
 const api = supertest(app)
 
+const user_tokens = {}
 
 describe('when there is initially some blogs saved', () => {
   beforeEach(async () => {
+    // Create users
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('salasana', 10)
+    const user1 = new User({ username: 'user1', passwordHash })
+    const user2 = new User({ username: 'user2', passwordHash })
+
+    const user1_response_creation = await user1.save()
+    const user2_response_creation = await user2.save()
+
+    // Get tokens
+    const user1_response_login = await api
+      .post('/api/login')
+      .send({
+        'username': 'user1',
+        'password': 'salasana'
+      })
+
+    user_tokens.user1 = user1_response_login.body.token
+
+    const user2_response_login = await api
+      .post('/api/login')
+      .send({
+        'username': 'user2',
+        'password': 'salasana'
+      })
+
+    user_tokens.user2 = user2_response_login.body.token
+
+    console.log()
+
+    // Add blogs and associate with created users
     await Blog.deleteMany({})
+
+    helper.initialBlogs.forEach(blog => blog.user = user1_response_creation._id.toString())
+    helper.initialBlogs[0].user = user2_response_creation._id.toString()
 
     await Blog.insertMany(helper.initialBlogs)
   })
@@ -42,6 +78,7 @@ describe('when there is initially some blogs saved', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${user_tokens.user1}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -49,6 +86,25 @@ describe('when there is initially some blogs saved', () => {
     const blogsAtEnd = await helper.blogsInDb()
 
     assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+  })
+
+  test('blog cannot be added if logged out, returns 401', async () => {
+    const newBlog = {
+      title: 'Yhdysvallat tiesi kaiken jopa Maduron ruokavaliosta ja lemmikeistä – näin hämmästyttävä sieppaus­operaatio toteutettiin',
+      url: 'https://yle.fi/a/74-20202504',
+      likes: 40,
+      author: 'Sakari Nuuttila'
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
   })
 
   test('the default value to likes is 0', async () => {
@@ -60,6 +116,7 @@ describe('when there is initially some blogs saved', () => {
 
     const response = await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${user_tokens.user1}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -81,6 +138,7 @@ describe('when there is initially some blogs saved', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${user_tokens.user1}`)
       .send(newBlog)
       .expect(400)
       .expect('Content-Type', /application\/json/)
@@ -94,18 +152,49 @@ describe('when there is initially some blogs saved', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${user_tokens.user1}`)
       .send(newBlog)
       .expect(400)
       .expect('Content-Type', /application\/json/)
   })
 
-  test('delete a blog', async () => {
+  test('delete a blog, wrong user, return 403', async () => {
     const blogsAtStart = await helper.blogsInDb()
 
     const idOfBlog = blogsAtStart[0].id
 
     await api
       .delete(`/api/blogs/${idOfBlog}`)
+      .set('Authorization', `Bearer ${user_tokens.user1}`)
+      .expect(403)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    assert.strictEqual(blogsAtStart.length, blogsAtEnd.length)
+  })
+
+  test('delete a blog, without token, return 401', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+
+    const idOfBlog = blogsAtStart[0].id
+
+    await api
+      .delete(`/api/blogs/${idOfBlog}`)
+      .expect(401)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    assert.strictEqual(blogsAtStart.length, blogsAtEnd.length)
+  })
+
+  test('delete a blog, success', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+
+    const idOfBlog = blogsAtStart[0].id
+
+    await api
+      .delete(`/api/blogs/${idOfBlog}`)
+      .set('Authorization', `Bearer ${user_tokens.user2}`)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
