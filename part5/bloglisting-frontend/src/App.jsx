@@ -6,13 +6,13 @@ import loginService from "./services/login";
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const [title, setTitle] = useState();
-  const [author, setAuthor] = useState();
-  const [url, setUrl] = useState();
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [url, setUrl] = useState('');
 
   const fetchBlogs = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -54,19 +54,26 @@ const App = () => {
   };
 
   const handleCreateBlog = async (e) => {
-    e.preventDefault;
+    e.preventDefault();
     try {
       await blogService.create({
         title,
         author,
         url,
       });
+      setErrorMessage(`a new blog ${title} by ${author} added`);
       setTitle("");
       setAuthor("");
       setUrl("");
       fetchBlogs();
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     } catch (error) {
-      console.log(error.response.data.error);
+      setErrorMessage(error.response.data.error);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
 
@@ -103,11 +110,12 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      {errorMessage && <p>{errorMessage}</p>}
       <p>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
 
-      <form action={handleCreateBlog}>
+      <form onSubmit={handleCreateBlog}>
         <h2>create new</h2>
         <div>
           <label>
@@ -115,6 +123,7 @@ const App = () => {
             <input
               name="title"
               type="text"
+              value={title}
               onChange={({ target }) => setTitle(target.value)}
             />
           </label>
@@ -125,6 +134,7 @@ const App = () => {
             <input
               name="author"
               type="text"
+              value={author}
               onChange={({ target }) => setAuthor(target.value)}
             />
           </label>
@@ -135,6 +145,7 @@ const App = () => {
             <input
               name="url"
               type="text"
+              value={url}
               onChange={({ target }) => setUrl(target.value)}
             />
           </label>
