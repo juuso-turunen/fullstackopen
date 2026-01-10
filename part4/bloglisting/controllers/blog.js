@@ -37,8 +37,10 @@ blogRouter.delete('/:id', middleware.userExtractor, async (request, response) =>
     return response.status(403).json({ error: 'access denied' })
   }
 
+  currentUser.blogs = currentUser.blogs.filter(b => b.toString() !== blog.id.toString())
+  await currentUser.save()
 
-  await Blog.findByIdAndDelete(request.params.id)
+  await blog.deleteOne()
 
   response.status(204).end()
 })
