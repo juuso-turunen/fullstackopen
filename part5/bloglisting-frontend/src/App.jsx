@@ -58,7 +58,7 @@ const App = () => {
     try {
       await blogService.create(blog);
       setErrorMessage(`a new blog ${blog.title} by ${blog.author} added`);
-      blogFormRef.current.close()
+      blogFormRef.current.close();
       fetchBlogs();
       setTimeout(() => {
         setErrorMessage(null);
