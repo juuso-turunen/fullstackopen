@@ -19,6 +19,16 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   };
 
+  const updateBlog = (newBlog) => {
+    const blogToUpdate = blogs.find((b) => b.id === newBlog.id);
+
+    if (blogToUpdate) {
+      setBlogs(blogs.map(b => b.id === newBlog.id ? newBlog : b));
+    } else {
+      setBlogs([...blogs, newBlog]);
+    }
+  };
+
   useEffect(() => {
     fetchBlogs();
   }, []);
@@ -56,10 +66,10 @@ const App = () => {
 
   const handleCreateBlog = async (blog) => {
     try {
-      await blogService.create(blog);
+      const newBlog = await blogService.create(blog);
       setErrorMessage(`a new blog ${blog.title} by ${blog.author} added`);
       blogFormRef.current.close();
-      fetchBlogs();
+      updateBlog(newBlog);
       setTimeout(() => {
         setErrorMessage(null);
       }, 5000);
@@ -99,7 +109,7 @@ const App = () => {
       </Togglable>
 
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       ))}
     </div>
   );
