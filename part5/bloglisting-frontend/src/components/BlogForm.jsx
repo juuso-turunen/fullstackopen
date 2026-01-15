@@ -1,22 +1,22 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 const BlogForm = ({ handleSubmit: handleCreateBlog }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   const createBlog = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     await handleCreateBlog({
       title,
       author,
       url,
-    });
-    setTitle("");
-    setAuthor("");
-    setUrl("");
-  };
+    })
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
 
   return (
     <form onSubmit={createBlog}>
@@ -56,7 +56,7 @@ const BlogForm = ({ handleSubmit: handleCreateBlog }) => {
       </div>
       <button type="submit">create</button>
     </form>
-  );
-};
+  )
+}
 
-export default BlogForm;
+export default BlogForm

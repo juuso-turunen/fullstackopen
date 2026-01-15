@@ -1,43 +1,43 @@
-import { useState } from "react";
-import blogService from "../services/blogs";
+import { useState } from 'react'
+import blogService from '../services/blogs'
 
 const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
-  const [showFullDetails, setShowFullDetails] = useState(false);
+  const [showFullDetails, setShowFullDetails] = useState(false)
 
   const blogLike = async () => {
     try {
       const newBlog = {
         ...blog,
         likes: blog.likes + 1,
-      };
-      await blogService.put(newBlog);
-      updateBlog(newBlog);
+      }
+      await blogService.put(newBlog)
+      updateBlog(newBlog)
     } catch (error) {
-      console.error("failed to like", error);
+      console.error('failed to like', error)
     }
-  };
+  }
 
   const blogDelete = async () => {
     if (!window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      return;
+      return
     }
 
     try {
-      await blogService.remove(blog);
-      deleteBlog(blog);
+      await blogService.remove(blog)
+      deleteBlog(blog)
     } catch (error) {
-      console.error("failed to delete", error);
+      console.error('failed to delete', error)
     }
-  };
+  }
 
   const blogStyle = {
-    border: "1px solid black",
+    border: '1px solid black',
     padding: 10,
-  };
+  }
 
   return (
     <div style={blogStyle}>
-      {blog.title} {blog.author}{" "}
+      {blog.title} {blog.author}{' '}
       <button onClick={() => setShowFullDetails(!showFullDetails)}>view</button>
       {showFullDetails && (
         <>
@@ -52,7 +52,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog
