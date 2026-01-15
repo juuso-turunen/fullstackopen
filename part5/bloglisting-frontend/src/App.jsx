@@ -23,10 +23,14 @@ const App = () => {
     const blogToUpdate = blogs.find((b) => b.id === newBlog.id);
 
     if (blogToUpdate) {
-      setBlogs(blogs.map(b => b.id === newBlog.id ? newBlog : b));
+      setBlogs(blogs.map((b) => (b.id === newBlog.id ? newBlog : b)));
     } else {
       setBlogs([...blogs, newBlog]);
     }
+  };
+
+  const deleteBlog = (blog) => {
+    setBlogs(blogs.filter((b) => b.id !== blog.id));
   };
 
   useEffect(() => {
@@ -108,9 +112,17 @@ const App = () => {
         <BlogForm handleSubmit={handleCreateBlog} />
       </Togglable>
 
-      {blogs.sort((a, b) => b.likes - a.likes).map((blog) => (
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
-      ))}
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlog={updateBlog}
+            deleteBlog={deleteBlog}
+            user={user}
+          />
+        ))}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [showFullDetails, setShowFullDetails] = useState(false);
 
   const blogLike = async () => {
@@ -13,7 +13,20 @@ const Blog = ({ blog, updateBlog }) => {
       await blogService.put(newBlog);
       updateBlog(newBlog);
     } catch (error) {
-      console.error('failed to like', error)
+      console.error("failed to like", error);
+    }
+  };
+
+  const blogDelete = async () => {
+    if (!window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      return;
+    }
+
+    try {
+      await blogService.remove(blog);
+      deleteBlog(blog);
+    } catch (error) {
+      console.error("failed to delete", error);
     }
   };
 
@@ -33,6 +46,9 @@ const Blog = ({ blog, updateBlog }) => {
             likes {blog.likes} <button onClick={blogLike}>like</button>
           </div>
           <div>{blog.user.name}</div>
+          <div>
+            {user.username === blog.user.username && <button onClick={blogDelete}>delete</button>}
+          </div>
         </>
       )}
     </div>
