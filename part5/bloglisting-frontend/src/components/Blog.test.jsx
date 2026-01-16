@@ -9,7 +9,7 @@ vi.mock('../services/blogs', () => ({
   }
 }))
 
-describe('<Togglable />', () => {
+describe('<Blog />', () => {
   test('renders content', () => {
     const blog = {
       title: 'Component testing is done with react-testing-library',
