@@ -1,0 +1,28 @@
+# 
+GET http://localhost:3003/api/blogs
+
+###
+# 
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1dXNvIiwiaWQiOiI2OTVlNWU3YTc1OWY4MzA1ODgzYWQ3MmYiLCJpYXQiOjE3Njc3OTI0MzV9.Tr3qAhX6PGX6Uve0JGup9MI-C00FzFdo1b0amIdsSZE
+
+{
+    "title": "0Auto syttyi tuleen maan alla Tampereella – myös useita muita autoja tuhoutui rajussa parkkihalli­palossa",
+    "author": "Kirsi Matson-Mäkelä, Antti Palomaa",
+    "url": "https://yle.fi/a/74-20186043",
+    "likes": "2"
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBla2thIiwiaWQiOiI2OTVlNWU3ZDc1OWY4MzA1ODgzYWQ3MzEiLCJpYXQiOjE3Njc3OTI0ODd9.Kx4WBfPfoakcwQ6mwWZOIhIs8kJM4k0Z5VhXuVV6Rag
+
+{
+    "title": "Pekan blogi",
+    "author": "Pekka Kiitotie",
+    "url": "https://pekka.fi/",
+    "likes": "2"
+}

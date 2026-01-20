@@ -1,0 +1,9 @@
+# Juuso
+DELETE http://localhost:3003/api/blogs/695fca63fc903cac038852ab
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1dXNvIiwiaWQiOiI2OTVlNWU3YTc1OWY4MzA1ODgzYWQ3MmYiLCJpYXQiOjE3Njc3OTI0MzV9.Tr3qAhX6PGX6Uve0JGup9MI-C00FzFdo1b0amIdsSZE
+
+###
+# Pekka
+DELETE http://localhost:3003/api/blogs/695e7a5adedcfd1babe44142
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBla2thIiwiaWQiOiI2OTVlNWU3ZDc1OWY4MzA1ODgzYWQ3MzEiLCJpYXQiOjE3Njc3OTI0ODd9.Kx4WBfPfoakcwQ6mwWZOIhIs8kJM4k0Z5VhXuVV6Rag
+

@@ -1,0 +1,19 @@
+# Create a user
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "juuso",
+    "password": "juusonsalasana",
+    "name": "Juuso Turunen"
+}
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "pekka",
+    "password": "pekansalasana",
+    "name": "Pekka Kiitotie"
+}
