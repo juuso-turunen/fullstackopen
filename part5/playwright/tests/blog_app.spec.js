@@ -67,9 +67,20 @@ describe('Blog app', () => {
 
         await expect(page.getByText('likes 1')).toBeVisible()
         await page.getByRole('button', { name: 'like' }).click()
-
+        
         await expect(page.getByText('likes 2')).toBeVisible()
         await page.getByRole('button', { name: 'like' }).click()
+      })
+      
+      test('it can be deleted', async ({ page }) => {
+        page.on('dialog', dialog => dialog.accept());
+        
+        await expect(page.getByText('Uusi blogi! Juuso Turunen')).toBeVisible()
+        
+        await page.getByRole('button', { name: 'view' }).click()
+        await page.getByRole('button', { name: 'delete' }).click()
+        
+        await expect(page.getByText('Uusi blogi! Juuso Turunen')).toBeHidden()
       })
     })
   })
