@@ -68,5 +68,30 @@ describe("Blog app", () => {
       await expect(page.getByText('Uusi blogi! Juuso Turunen')).toBeVisible()
       await expect(page.getByRole('button', { name: 'view' })).toBeVisible()
     })
+    
+    describe('When one blog is created', () => {
+      beforeEach(async ({ page }) => {
+        await page.getByRole('button', { name: 'create a new blog' }).click()
+        
+        await page.getByLabel('title:').fill('Uusi blogi!')
+        await page.getByLabel('author:').fill('Juuso Turunen')
+        await page.getByLabel('url:').fill('https://example.com/blogi')
+        
+        await page.getByRole('button', { name: 'create' }).click()
+      })
+
+      test('it can be liked', async ({ page }) => {
+        await page.getByRole('button', { name: 'view' }).click()
+        
+        await expect(page.getByText('likes 0')).toBeVisible()
+        await page.getByRole('button', { name: 'like' }).click()
+
+        await expect(page.getByText('likes 1')).toBeVisible()
+        await page.getByRole('button', { name: 'like' }).click()
+
+        await expect(page.getByText('likes 2')).toBeVisible()
+        await page.getByRole('button', { name: 'like' }).click()
+      })
+    })
   })
 });
