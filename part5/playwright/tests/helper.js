@@ -15,4 +15,8 @@ const createBlog = async (page, title, author, url) => {
   await page.getByRole('button', { name: 'create' }).click()
 }
 
-export { loginWith, createBlog }
+const logOut = async (page) => {
+  await page.getByRole('button', { name: 'logout' }).click()
+}
+
+export { loginWith, createBlog, logOut }
