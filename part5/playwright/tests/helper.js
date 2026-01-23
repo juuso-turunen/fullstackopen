@@ -19,4 +19,18 @@ const logOut = async (page) => {
   await page.getByRole('button', { name: 'logout' }).click()
 }
 
-export { loginWith, createBlog, logOut }
+const likeBlog = async (page, blogName) => {
+  const blog = await page.getByText(blogName)
+
+  if (await blog.getByRole('button', { name: 'like' }).isHidden()) {
+    await blog.getByRole('button', { name: 'view' }).click()
+  }
+
+  const currentLikes = Number((await blog.getByText('likes').innerText()).replace('likes ', '').replace('like', ''))
+
+  await blog.getByRole('button', { name: 'like' }).click()
+
+  await page.getByText(blogName).getByText(`likes ${currentLikes + 1}`).waitFor()
+}
+
+export { loginWith, logOut, createBlog, likeBlog }
