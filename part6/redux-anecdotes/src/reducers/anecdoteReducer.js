@@ -33,6 +33,9 @@ const reducer = (state = initialState, action) => {
       }
       return state.map(o => o.id !== objectId ? o : updatedObject)
     }
+    case 'NEW': {
+      return [...state, asObject(action.payload.content)]
+    }
     default: return state
   }
 }
